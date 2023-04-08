@@ -1,15 +1,6 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <Windows.h>
-#include <conio.h.>
-#include <mmsystem.h>
 #include "Header.h"
-#define ROW 6
-#define COL 8
-using namespace std;
 
-void createBoard(int**& board, Board gameBoard) // khoi tao bang game all = 0 + khung vien ngoai = 0
+void createBoard(int**& board, Board gameBoard) 
 {
     board = new int* [gameBoard.row + 2];
     for (int i = 0; i < gameBoard.row + 2; i++)
@@ -22,30 +13,30 @@ void createBoard(int**& board, Board gameBoard) // khoi tao bang game all = 0 + 
     }
 }
 
-void createPoint(int**& board, Board gameBoard) // khoi tao cac cap point
+void createPoint(int**& board, Board gameBoard) 
 {
-    if ((gameBoard.row * gameBoard.col) % 2 == 1)
+    if ((gameBoard.row * gameBoard.col) % 2 == 1) //use for custom mode
     {
         int x = rand() % gameBoard.row + 1;
         int y = rand() % gameBoard.col + 1;
         board[x][y] = 1;
-    }
-    // fixed "i = 0, j = 0" to "i = 1, j = 1"
+    } 
+    
     for (int i = 1; i < gameBoard.row + 1; i++)
     {
         for (int j = 1; j < gameBoard.col + 1; j++)
         {
-            if (board[i][j] == 0) // neu khac 0 r thi khoi random
+            if (board[i][j] == 0) 
             {
                 board[i][j] = rand() % 15 + 65;
-                int x = rand() % gameBoard.row + 1; // random hang
-                int y = rand() % gameBoard.col + 1; // random cot
-                while (board[x][y] != 0 || (i == x && j == y)) // random lai neu bi trung vi tri
+                int x = rand() % gameBoard.row + 1; 
+                int y = rand() % gameBoard.col + 1; 
+                while (board[x][y] != 0 || (i == x && j == y)) 
                 {
                     x = rand() % gameBoard.row + 1;
                     y = rand() % gameBoard.col + 1;
                 }
-                board[x][y] = board[i][j]; // dam bao co 2 cap so giong nhau
+                board[x][y] = board[i][j]; 
             }
         }
     }
@@ -55,16 +46,15 @@ void deletePoint(int** board, Pokemon p1, Pokemon p2, int mode) // xoa phan tu c
 {
     board[p1.i][p1.j] = 0;
     board[p2.i][p2.j] = 0;
-    if (mode == 0)
+    if (mode == 0) //EASY MODE
         return;
-    // khi chon hard mode thi se xoa theo kieu roi xuong
-
-    // fixed "i >= 0" to "i >= 1"
+    
+    //HARD MODE
     for (int i = p1.i; i >= 1; i--)
     {
         board[i][p1.j] = board[i - 1][p1.j];
     }
-    if (p1.j == p2.j && p1.i > p2.i) //hai pokemon chung hang, p1 nam duoi p2
+    if (p1.j == p2.j && p1.i > p2.i) 
         p2.i++;
     for (int i = p2.i; i >= 1; i--)
     {
@@ -72,7 +62,7 @@ void deletePoint(int** board, Pokemon p1, Pokemon p2, int mode) // xoa phan tu c
     }
 }
 
-bool samePoint(int** board, Pokemon p1, Pokemon p2) // neu chon trung hoac 2 point khac nhau thi chon lai
+bool samePoint(int** board, Pokemon p1, Pokemon p2) 
 {
     if (board[p1.i][p1.j] != board[p2.i][p2.j])
         return false;
@@ -108,13 +98,13 @@ bool matchingI(int** board, Pokemon p1, Pokemon p2)
 
 bool matchingL(int** board, Pokemon p1, Pokemon p2, Pokemon& corner)
 {
-    // 4 goc
+    // 2 corner cells
     Pokemon temp1, temp2;
     temp1.i = p1.i, temp1.j = p2.j;
     temp2.i = p2.i, temp2.j = p1.j;
     if (board[temp1.i][temp1.j] != 0 && board[temp2.i][temp2.j] != 0) // new condition
         return false;
-    // check matching i 4 goc
+    // check matching I for two cases of L matching
     bool path_1_1 = matchingI(board, p1, temp1);
     bool path_1_2 = matchingI(board, p2, temp1);
 
@@ -141,7 +131,7 @@ bool matchingL(int** board, Pokemon p1, Pokemon p2, Pokemon& corner)
 
 bool matchingUZ(int** board, Pokemon& p1, Pokemon& p2, Pokemon& corner1, Pokemon& corner2, Board gameBoard)
 {
-    //Xet |_| / ;-' ( 2 corners in the same row)
+    //2 corners in the same row
     bool flag = false;
     int min = (gameBoard.row + 1) * 2;
     if (p1.i > p2.i)
@@ -154,7 +144,7 @@ bool matchingUZ(int** board, Pokemon& p1, Pokemon& p2, Pokemon& corner1, Pokemon
         Pokemon temp1, temp2;
         temp1.i = i, temp1.j = p1.j;
         temp2.i = i, temp2.j = p2.j;
-        if (board[temp1.i][temp1.j] == 0 && board[temp2.i][temp2.j] == 0) // new condition
+        if (board[temp1.i][temp1.j] == 0 && board[temp2.i][temp2.j] == 0)
         {
             bool path_1 = matchingI(board, p1, temp1);
             bool path_2 = matchingI(board, p2, temp2);
@@ -180,7 +170,7 @@ bool matchingUZ(int** board, Pokemon& p1, Pokemon& p2, Pokemon& corner1, Pokemon
     if (flag)
         return true;
 
-    //Xet =| / -|_ (2 corners in the same column)
+    //(2 corners in the same column)
     flag = false;
     min = (gameBoard.col + 1) * 2;
     if (p1.j > p2.j)
@@ -193,7 +183,7 @@ bool matchingUZ(int** board, Pokemon& p1, Pokemon& p2, Pokemon& corner1, Pokemon
         Pokemon temp1, temp2;
         temp1.i = p1.i, temp1.j = j;
         temp2.i = p2.i, temp2.j = j;
-        if (board[temp1.i][temp2.j] == 0 && board[temp2.i][temp2.j] == 0) // new condition
+        if (board[temp1.i][temp2.j] == 0 && board[temp2.i][temp2.j] == 0) 
         {
             bool path_1 = matchingI(board, p1, temp1);
             bool path_2 = matchingI(board, p2, temp2);
@@ -299,7 +289,7 @@ bool checkContinue(int** board, Pokemon& p1, Pokemon& p2, Board gameBoard) //new
     return false;
 }
 
-void shuffleBoard(int**& board, Board gameBoard) // new function
+void shuffleBoard(int**& board, Board gameBoard) 
 {
     Pokemon p1, p2;
     p1.i = rand() % gameBoard.row + 1;
@@ -840,13 +830,18 @@ NEW_GAME:
     }
 }
 
-void GameplayCustom(int**& board, int mode, Board& gameBoard, vector <Player*> list, int playerPos)
+void GameplayCustom(int**& board, int mode, Board& gameBoard, vector <Player*> list, int playerPos, bool &hackFile)
 {
 NEW_GAME:
 
     system("cls");
-    createBoard(board, gameBoard);
-    createPoint(board, gameBoard);
+    if (!hackFile) //hack file board not exist
+    {
+        createBoard(board, gameBoard);
+        createPoint(board, gameBoard);
+    }
+    else
+        hackFile = false;
 
     displayScreen();
     displayPlayerInfo(list, playerPos);

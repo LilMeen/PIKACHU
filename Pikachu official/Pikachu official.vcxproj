@@ -132,7 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Display.cpp" />
-    <ClCompile Include="function.cpp" />
+    <ClCompile Include="Function.cpp" />
     <ClCompile Include="Gameplay-Pointer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />

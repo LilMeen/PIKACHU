@@ -1,15 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <Windows.h>
-#include <conio.h.>
-#include <stdlib.h>
-#include <mmsystem.h>
-#include <fstream>
 #include "Header.h"
-#pragma warning(disable : 4996)
-
-using namespace std;
 
 void IntroScreen()
 {
@@ -21,7 +10,7 @@ void IntroScreen()
     {
         gotoxy(i, 0);
         cout << c;
-        Sleep(5);
+        Sleep(15); //5
     }
 
     c = 222;
@@ -29,7 +18,7 @@ void IntroScreen()
     {
         gotoxy(screenWidth - 1, i);
         cout << c;
-        Sleep(10);
+        Sleep(15); //10
     }
 
     c = 223;
@@ -37,7 +26,7 @@ void IntroScreen()
     {
         gotoxy(i, screenHeight);
         cout << c;
-        Sleep(5);
+        Sleep(15); //5
     }
 
     c = 221;
@@ -45,16 +34,16 @@ void IntroScreen()
     {
         gotoxy(0, i);
         cout << c;
-        Sleep(10);
+        Sleep(15); //5
     }
     for (int i = 1; i < 14; i++)
     {
         TextColor(i);
-        displayLogo(18, 7);
+        displayLogo(18, 8);
         Sleep(400);
     }
     TextColor(YELLOW);
-    displayLogo(18, 7);
+    displayLogo(18, 8);
 }
 
 void loginScreen(vector <Player*>& list, int& playerPos)
@@ -264,7 +253,7 @@ void helpScreen()
     gotoxy(43, 21);
     cout << "THERE MUST BE NO OBSTACLES BETWEEN";
     gotoxy(43, 22);
-    cout << "THE,.";
+    cout << "THEM.";
     gotoxy(43, 24);
     cout << "  . YOU WILL WIN THE GAME WHEN";
     gotoxy(43, 25);
@@ -372,6 +361,7 @@ void customScreen(int& mode, Board& gameBoard)
     cout << "    \\/___/     \\/_____/    \\/_____/      \\/_/    \\/_____/   \\/_/ \\/_/";
 
     bool loop = true;
+    //if (board[0][0])
     while (loop)
     {
         TextColor(WHITE);
@@ -474,9 +464,10 @@ void customScreen(int& mode, Board& gameBoard)
     }
 }
 
-void hackScreen(vector <Player*>& list, int playerPos)
+void hackScreen(vector <Player*>& list, int playerPos, Board &gameBoard, int** &board, bool &hackFile)
 {
     savefile a;
+    int i = 0;
     system("cls");
     displayScreen();
     while (true)
@@ -512,6 +503,9 @@ void hackScreen(vector <Player*>& list, int playerPos)
         }
         else
         {
+        NEW_INFO:
+            gotoxy(42, 33);
+            cout << "Enter 1 - 5 to change the information ";
             loadFileHacking(fileName, a);
             string maskbin = binary(int(a.mask));
             char temp[20];
@@ -528,12 +522,15 @@ void hackScreen(vector <Player*>& list, int playerPos)
             gotoxy(35, 12);
             cout << "BEST POINT EASY: " << list[playerPos]->Easy->bestPoint;
             gotoxy(58, 12);
-            cout << "===>  " << a.record[0].points;
+            cout << "===>  " << a.record[i].points;
             gotoxy(46, 15);
             cout << "HARD: " << list[playerPos]->Hard->bestPoint;
             gotoxy(58, 15);
-            cout << "===>  " << a.record[0].points;
-
+            cout << "===>  " << a.record[i].points;
+            gotoxy(40, 18);
+            cout << "GAME BOARD: " << 6 << " x " << 8;
+            gotoxy(58, 18);
+            cout << "===>  " << a.state[i].p << " x " << a.state[i].q << " (available in custom mode)";
             string option;
             while (true)
             {
@@ -562,9 +559,28 @@ void hackScreen(vector <Player*>& list, int playerPos)
                     }
                     else
                     {
+                        char c[999];
+                        string boardxor = sovleXor(a.state[i].board, maskbin);
+                        strcpy(c, boardxor.c_str());
+
                         strcpy(list[playerPos]->userName, temp);
-                        list[playerPos]->Easy->bestPoint = a.record->points;
-                        list[playerPos]->Hard->bestPoint = a.record->points;
+                        list[playerPos]->Easy->bestPoint = a.record[i].points;
+                        list[playerPos]->Hard->bestPoint = a.record[i].points;
+                        gameBoard.row = a.state[i].p;
+                        gameBoard.col = a.state[i].q;
+                        gameBoard.height = gameBoard.row * 5;
+                        gameBoard.width = gameBoard.col * 10;
+                        createBoard(board, gameBoard);
+                        for (int i = 1, k = 0; i < gameBoard.row + 1; i++)
+                        {
+                            for (int j = 1; j < gameBoard.col + 1; j++)
+                            {                               
+                                board[i][j] = (int)c[k];
+                                k++;
+                            }                               
+                        }
+                        hackFile = true;
+                        
                         system("cls");
                         break;
                     }
@@ -574,6 +590,34 @@ void hackScreen(vector <Player*>& list, int playerPos)
                     system("cls");
                     break;
                 }
+
+                else if (option == "1")
+                {
+                    i = 0;
+                    goto NEW_INFO;
+                }
+                    
+                else if (option == "2")
+                {
+                    i = 1;
+                    goto NEW_INFO;
+                }
+                else if (option == "3")
+                {
+                    i = 2;
+                    goto NEW_INFO;
+                }
+                else if (option == "4")
+                {
+                    i = 3;
+                    goto NEW_INFO;
+                }
+                else if (option == "5")
+                {
+                    i = 4;
+                    goto NEW_INFO;
+                }
+
                 else
                 {
                     PlaySound(TEXT("MISTAKE.wav"), NULL, SND_ASYNC);

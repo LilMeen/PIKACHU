@@ -1,19 +1,14 @@
-#include <iostream>
-#include <Windows.h>
-#include <conio.h.>
-#include <stdlib.h>
-#include <mmsystem.h>
 #include "Header.h"
-#pragma comment(lib, "winmm.lib")
-
-using namespace std;
 
 void interactWithMenu(vector <Player*> list, int playerPos)
 {
+    int** board = NULL;
+
 BACK_TO_MENU:
     TextColor(WHITE);
     displayMenuScreen();
-
+    bool hackFile;
+    Board gameBoard;
     int choice = 1;
     bool menuLoop = true;
     while (menuLoop)
@@ -98,8 +93,7 @@ BACK_TO_MENU:
                     case KEY_ENTER: case SPACE_BAR:
 
                         PlaySound(TEXT("SELECT.wav"), NULL, SND_ASYNC);
-                        Board gameBoard;
-                        int** board = NULL;
+                        
 
                         switch (choice)
                         {
@@ -119,8 +113,11 @@ BACK_TO_MENU:
 
                         case 3: //CUSTOM MODE
                             int mode;
-                            customScreen(mode, gameBoard);
-                            GameplayCustom(board, mode, gameBoard, list, playerPos);
+                            if (!hackFile)
+                                customScreen(mode, gameBoard);
+                            else
+                                mode = 0;
+                            GameplayCustom(board, mode, gameBoard, list, playerPos, hackFile);
                             deleteBoard(board, gameBoard);
 
                             system("cls");
@@ -138,28 +135,28 @@ BACK_TO_MENU:
                 menuLoop = false;
                 break;
 
-            case 2: // leaderboard
+            case 2: // LEADERBOARD
                 system("cls");
                 displayScreen();
                 leaderboardScreen(list);
                 goto BACK_TO_MENU;
                 break;
 
-            case 3:
+            case 3: //HELP
                 system("cls");
                 displayScreen();
                 helpScreen();
                 goto BACK_TO_MENU;
                 break;
 
-            case 4:
+            case 4: //EXIT
                 outputInfoPlayerBin(list, "Player.bin");
                 system("cls");
                 exit(0);
                 break;
             }
-        case KEY_H:
-            hackScreen(list, playerPos);
+        case KEY_H: //HACKING FILE
+            hackScreen(list, playerPos, gameBoard, board, hackFile);
             goto BACK_TO_MENU;
             break;
         }

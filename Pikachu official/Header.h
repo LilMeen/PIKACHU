@@ -1,14 +1,59 @@
-#pragma once
+#pragma comment(lib, "winmm.lib")
+#pragma warning(disable : 4996)
+#include <iostream>
+#include <Windows.h>
+#include <conio.h.>
+#include <string.h>
+#include <stdlib.h>
 #include <vector>
+#include <fstream>
+#include <mmsystem.h>
+#include <cmath>
+#include <cstring>
+#include <ctime>
 #include <string>
 using namespace std;
 
-// save file hacking
+// Save file hacking
 #define PADDING 500
 #define NAMESIZE 50
 #define PASSSIZE 50
 #define BOARDSIZE 999
 #define URLSIZE 100
+
+// COLOR CODE
+#define BLACK 0
+#define BLUE 1
+#define GREEN 2
+#define AQUA 3
+#define RED 4
+#define PURPLE 5
+#define YELLOW 6
+#define WHITE 7
+#define GRAY 8
+#define LIGHT_BLUE 9
+#define LIGHT_GREEN 10
+#define LIGHT_AQUA 11
+#define LIGHT_RED 12
+#define LIGHT_PURPLE 13
+#define LIGHT_YELLOW 14
+#define BRIGHT_WHITE 15
+
+// MOVEMENT
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+#define KEY_ENTER 13
+#define KEY_ESC 27
+#define SPACE_BAR 32
+#define KEY_F 102
+#define KEY_H 104
+#define KEY_S 115
+
+// SCREEN SIZE
+#define screenWidth 120
+#define screenHeight 35
 
 struct State
 {
@@ -75,24 +120,24 @@ struct Player
 };
 
 
-// Cac ham trong Function.cpp - Thuc hien các chuc nang co ban
-void gotoxy(int x, int y);                                               // REF: https://hoctincungthukhoa.com/index.php/l-p-trinh-c-c/64-xay-d-ng-ham-gotoxy-wherex-wherey-trong-dev-c
-void TextColor(int x);                                                   // Change text color  REF: https://tuicocach.com/viet-ham-thay-doi-mau-chu-trong-man-hinh-console-c-c/
-void ShowConsoleCursor(bool showFlag);                                   // 0: hide cursor, 1: show cursor  REF: https://cplusplus.com/forum/beginner/118176/
+// Funcions in Function.cpp - doing basic functions for game UI
+void gotoxy(int x, int y);                                               
+void TextColor(int x);                                                   
+void ShowConsoleCursor(bool showFlag); // 0: hide cursor, 1: show cursor  
 
-// Cac ham trong Screen.cpp - Hien cac man hinh khac nhau
+// Function in Screen.cpp - display different screens
 void IntroScreen();
 void loginScreen(vector <Player*>& list, int& playerPos);
 void helpScreen();
 void leaderboardScreen(vector <Player*> list);
 void customScreen(int& mode, Board& gameBoard);
-void hackScreen(vector <Player*>& list, int playerPos);
+void hackScreen(vector <Player*>& list, int playerPos, Board &gameBoard, int** &board, bool& hackFile);
 
-// Cac ham trong Menu.cpp - Thao tac voi menu
+// Function in Menu.cpp
 void interactWithMenu(vector <Player*> list, int playerPos);
 
-// Cac ham trong Display.cpp - Ve hinh
-void displayBox(int x, int y, int boxHeight, int boxWidth, string s);    // Draw play button
+// Functions in Display.cpp - Draw image
+void displayBox(int x, int y, int boxHeight, int boxWidth, string s);    
 void displayScreen();
 void displayLogo(int x, int y);
 void displayMenuScreen();
@@ -115,9 +160,9 @@ void matchingLineUZ(Pokemon p1, Pokemon p2, Pokemon corner1, Pokemon corner2, in
 void displayBackground_2(Pokemon p);
 void background_1_upgrade(Pokemon p);
 
-// Cac ham trong Gameplay-Pointer.cpp - Gameplay bang pointer
-void createBoard(int**& board, Board gameBoard); // tao bang ao
-void createPoint(int**& board, Board gameBoard); // tao cac gia tri
+// Functions in Gameplay-Pointer.cpp - Main gameplay
+void createBoard(int**& board, Board gameBoard); 
+void createPoint(int**& board, Board gameBoard); 
 void deletePoint(int** board, Pokemon p1, Pokemon p2, int mode);
 bool samePoint(int** board, Pokemon p1, Pokemon p2);
 bool matchingI(int** board, Pokemon p1, Pokemon p2);
@@ -127,10 +172,10 @@ bool checkMatching(int** board, Pokemon p1, Pokemon p2, int& point, Board gameBo
 bool checkContinue(int** board, Pokemon& p1, Pokemon& p2, Board gameBoard);
 void shuffleBoard(int**& board, Board gameBoard);
 void Gameplay(int**& board, int mode, Board& gameBoard, vector <Player*> list, int playerPos);
-void GameplayCustom(int**& board, int mode, Board& gameBoard, vector <Player*> list, int playerPos);
+void GameplayCustom(int**& board, int mode, Board& gameBoard, vector <Player*> list, int playerPos, bool &hackFile);
 void deleteBoard(int**& board, Board gameBoard);
 
-// Cac ham trong Player.cpp - Xu li du lieu nguoi choi
+// Functions in Player.cpp - Store and process players's data
 bool checkAvailableUserName(vector <Player*> list, string userName);
 void addNewPlayerToList(vector <Player*>& list, string userName);
 int posPlayerInList(vector <Player*>& list, string userName);
@@ -144,45 +189,12 @@ void sortPlayerPointHard(vector <Player*> list);
 void sortPlayerTimeEasy(vector <Player*> list);
 void sortPlayerTimeHard(vector <Player*> list);
 
-// Cac ham trong SaveFileHacking
+// Functions in SaveFileHacking
 void loadFileHacking(string fileName, savefile& a);
 string operatorXor(string a, string mask);
 string binary(int a);
 int decimal(string a);
 string sovleXor(char a[], string mask);
-void changeInfor(savefile& a, Player*& bht);
-void saveFileHacking(string nameFile, savefile a);
 
-// COLOR CODE
-#define BLACK 0
-#define BLUE 1
-#define GREEN 2
-#define AQUA 3
-#define RED 4
-#define PURPLE 5
-#define YELLOW 6
-#define WHITE 7
-#define GRAY 8
-#define LIGHT_BLUE 9
-#define LIGHT_GREEN 10
-#define LIGHT_AQUA 11
-#define LIGHT_RED 12
-#define LIGHT_PURPLE 13
-#define LIGHT_YELLOW 14
-#define BRIGHT_WHITE 15
 
-// MOVEMENT
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define KEY_ENTER 13
-#define KEY_ESC 27
-#define SPACE_BAR 32
-#define KEY_F 102
-#define KEY_H 104
-#define KEY_S 115
 
-//
-#define screenWidth 120
-#define screenHeight 35

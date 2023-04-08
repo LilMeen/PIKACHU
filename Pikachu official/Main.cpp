@@ -1,8 +1,4 @@
-#include <iostream>
-#include <ctime>
-#include <vector>
 #include "Header.h"
-using namespace std;
 
 int main()
 {

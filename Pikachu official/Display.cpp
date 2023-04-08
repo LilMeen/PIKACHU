@@ -1,8 +1,4 @@
-#include <iostream>
-#include <Windows.h>
-#include <conio.h.>
 #include "Header.h"
-using namespace std;
 
 void displayBox(int x, int y, int boxHeight, int boxWidth, string s) //input the corner coordinate of the box and box's size
 {
@@ -92,8 +88,13 @@ void displayMenuScreen()
 {
 	TextColor(WHITE);
 	displayScreen();
+	TextColor(GRAY);
+	gotoxy(44, 2);
+	cout << "22127267 - NGUYEN HOANG KHAI MINH";
+	gotoxy(46, 3);
+	cout << "22127180 - NGUYEN PHUC KHANG";
 	TextColor(YELLOW);
-	displayLogo(18, 7);
+	displayLogo(18, 8);
 	TextColor(WHITE);
 }
 
@@ -129,7 +130,7 @@ void displayPokeball(int x, int y, int ball_color)
 	cout << "       @@@@@@@@@@@&  "; gotoxy(x, ++y);
 }
 
-void displayBackground_1(int x, int y)
+void displayBackground_1(int x, int y) //display the whole background
 {
 	TextColor(6);
 	gotoxy(x, y);
@@ -1022,7 +1023,7 @@ void displayBackground_2(Pokemon p)
 	TextColor(WHITE);
 }
 
-void background_1_upgrade(Pokemon p)
+void background_1_upgrade(Pokemon p) //display one part of the background based on the cell location 
 {
 	if (p.i == 1 && p.j == 1)
 	{

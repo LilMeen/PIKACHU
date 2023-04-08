@@ -1,17 +1,11 @@
-#include <iostream>
-#include <Windows.h>
-#include <conio.h.>
-#include <stdlib.h>
 #include "Header.h"
-
-using namespace std;
 
 void gotoxy(int x, int y) {
     COORD pos = { x, y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void TextColor(int x)//X là mã màu
+void TextColor(int x)// x is the corlor code
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, x);

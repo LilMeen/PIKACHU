@@ -1,14 +1,4 @@
-#pragma warning(disable : 4996)
-#include <iostream>
-#include <Windows.h>
-#include <conio.h.>
-#include <string.h>
-#include <stdlib.h>
-#include <vector>
-#include <fstream>
 #include "Header.h"
-
-using namespace std;
 
 bool checkAvailableUserName(vector <Player*> list, string userName)
 {
@@ -112,7 +102,6 @@ void loadInfoPlayerBin(vector <Player*>& list, string nameFile)
         inFile.read((char*)&newPlayer->Hard->bestTime, 4);
         inFile.read((char*)&newPlayer->Hard->matches, 4);
 
-        // chua het file moi add them, tranh truong hop add du
         if (!inFile.eof())
             list.push_back(newPlayer);
     }

@@ -22,7 +22,7 @@ Game box size:
 - Width: 80
 - Height: 30
 - Corner point: 4, 3
-* This game box size creates small boxes size 5p1.i0 (for the matching game) that fit the given width and Height
+* This game box size creates small boxes size 5x10 (for the matching game) that fit the given width and Height
 * In this case it makes 48 boxes
 
 Cell size:
