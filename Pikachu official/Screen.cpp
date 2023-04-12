@@ -10,7 +10,7 @@ void IntroScreen()
     {
         gotoxy(i, 0);
         cout << c;
-        Sleep(15); //5
+        Sleep(5); //5
     }
 
     c = 222;
@@ -18,7 +18,7 @@ void IntroScreen()
     {
         gotoxy(screenWidth - 1, i);
         cout << c;
-        Sleep(15); //10
+        Sleep(10); //10
     }
 
     c = 223;
@@ -26,7 +26,7 @@ void IntroScreen()
     {
         gotoxy(i, screenHeight);
         cout << c;
-        Sleep(15); //5
+        Sleep(5); //5
     }
 
     c = 221;
@@ -34,7 +34,7 @@ void IntroScreen()
     {
         gotoxy(0, i);
         cout << c;
-        Sleep(15); //5
+        Sleep(10); //5
     }
     for (int i = 1; i < 14; i++)
     {

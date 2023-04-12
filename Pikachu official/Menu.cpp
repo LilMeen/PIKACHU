@@ -3,11 +3,11 @@
 void interactWithMenu(vector <Player*> list, int playerPos)
 {
     int** board = NULL;
+    bool hackFile = false;
 
 BACK_TO_MENU:
     TextColor(WHITE);
     displayMenuScreen();
-    bool hackFile;
     Board gameBoard;
     int choice = 1;
     bool menuLoop = true;
